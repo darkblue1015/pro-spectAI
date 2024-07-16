@@ -1,0 +1,35 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    height: 100vh;
+    background-color:#f0f0f0;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between; /* Ensure last item is at the bottom */
+  }
+  
+  .sidebar-item {
+    width: 30px;
+    height: 30px;
+    margin: 10px 0;
+    background-color:  #ccc;
+    border-radius: 50%;
+    border: black;
+  }
+  
+  .sidebar-item.active {
+    background-color: #ffa500;
+  }
+  
+  .sidebar-items-top,
+  .sidebar-items-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.sidebar-items-bottom{
+    margin-bottom: 2rem;
+}
+  

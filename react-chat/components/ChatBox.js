@@ -1,14 +1,4 @@
 import React, { useState } from "react";
-import { OpenAIApi, Configuration } from "openai";
-
-const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
-// const openai = new OpenAIApi({
-//   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-// });
 
 const ChatBox = () => {
   const [messages, setMessages] = useState([]);
@@ -21,21 +11,13 @@ const ChatBox = () => {
     setMessages([...messages, userMessage]);
     setInput("");
 
-    try {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: `User: ${input}\nAI:`,
-        max_tokens: 150,
-      });
-
-      const aiMessage = {
-        sender: "ai",
-        text: response.data.choices[0].text.trim(),
-      };
-      setMessages([...messages, userMessage, aiMessage]);
-    } catch (error) {
-      console.error("Error fetching response from OpenAI:", error);
-    }
+    // Generate a pseudo response
+    const pseudoResponse = `This is a pseudo response to: ${input}`;
+    const aiMessage = {
+      sender: "ai",
+      text: pseudoResponse,
+    };
+    setMessages((prevMessages) => [...prevMessages, aiMessage]);
   };
 
   return (

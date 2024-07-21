@@ -14,7 +14,7 @@
 .task-panel {
   width: 300px;
 } */
-.app {
+/* .app {
   display: flex;
   height: 100vh;
 }
@@ -43,5 +43,38 @@
 .task-panel {
   flex-shrink: 0;
   width: 300px;
+} */
+
+.app {
+  display: flex;
+  height: 100vh;
 }
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.task-panel {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.chatbox {
+  width: 300px; /* 根据需要调整宽度 */
+  border-left: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+
 

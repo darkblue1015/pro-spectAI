@@ -6,9 +6,9 @@ import rightLogo from "./logo.jpg"; // You can use different images as needed
 const Navbar = () => {
   return (
     <div className="navbar">
-      <div className="navbar-logo-left">
+      {/* <div className="navbar-logo-left">
         <img src={leftLogo} alt="Left Logo" />
-      </div>
+      </div> */}
       <div className="navbar-item">Challenge Overview</div>
       <div className="navbar-item">Validation Challenge</div>
       <div className="navbar-item">Feedback & Referrals</div>

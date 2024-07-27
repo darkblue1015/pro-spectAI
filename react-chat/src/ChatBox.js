@@ -125,6 +125,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ChatHistory from "./chat-his";
 import "./ChatBox.css";
+import OpenAI from "openai";
 
 // const ChatBox = () => {
 //   const [messages, setMessages] = useState([]);
@@ -239,20 +240,50 @@ const ChatBox = () => {
     setMessages(updatedMessages);
 
     // Simulate AI response
-    const aiResponse = "This is a simulated response from the AI.";
-    const aiMessage = { sender: "ai", text: aiResponse };
+    // const aiResponse = "This is a simulated response from the AI.";
+    // const aiMessage = { sender: "ai", text: aiResponse };
 
-    const finalMessages = [...updatedMessages, aiMessage];
-    setMessages(finalMessages);
-    setInput("");
+    // const finalMessages = [...updatedMessages, aiMessage];
+    // setMessages(finalMessages);
+    // setInput("");
 
     try {
+      const aiResponse = await getAIResponse(input);
+
+      const aiMessage = { sender: "ai", text: aiResponse };
+      const finalMessages = [...updatedMessages, aiMessage];
+      setMessages(finalMessages);
+      setInput("");
       await axios.post("http://localhost:5001/messages", userMessage);
-      await axios.post("http://localhost:5001/messages", aiMessage);
+      // await axios.post("http://localhost:5001/messages", aiMessage);
     } catch (error) {
       console.error("Error saving message:", error);
     }
   };
+
+  const getAIResponse = async (userInput) => {
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/completions",
+      {
+        model: "gpt-3.5-turbo",
+        prompt: userInput,
+        max_tokens:3,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer sk-proj-3q3CisgsV15D6zgv8gjkT3BlbkFJat8VXkts4n1rI1iqO8MJ`,
+        },
+      }
+    );
+    return response.data.choices[0].text.trim();
+  } catch (error) {
+    console.error("Error getting AI response:", error.response ? error.response.data : error.message);
+    return "Sorry, I couldn't understand that.";
+  }
+};
+
 
   const handleSelectMessage = (index) => {
     const selectedMessage = history[index];

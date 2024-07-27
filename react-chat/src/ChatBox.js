@@ -261,23 +261,60 @@ const ChatBox = () => {
     }
   };
 
-  const getAIResponse = async (userInput) => {
+//   const getAIResponse = async (userInput) => {
+//   try {
+//     const response = await axios.post(
+//       "https://api.openai.com/v1/chat/completions",
+//       {
+//         model: "gpt-3.5-turbo",
+//         messages: [{ role: "user", content: userInput }],
+//         // prompt: userInput,
+//         max_tokens:3,
+//       },
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer sk-proj-PCP27N5CwFeuOKswYlIOT3BlbkFJg2anMyA2UP772sC6Gh3n`,
+//         },
+//       }
+//     );
+//     return response.data.choices[0].text.trim();
+//   } catch (error) {
+//     console.error("Error getting AI response:", error.response ? error.response.data : error.message);
+//     return "Sorry, I couldn't understand that.";
+//   }
+// };
+const getAIResponse = async (userInput) => {
   try {
+    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+    console.log("OpenAI API Key:", apiKey); // Verify the API key is being loaded
+
+    if (!apiKey) {
+      throw new Error("OpenAI API key is not defined. Please check your .env file.");
+    }
+
     const response = await axios.post(
-      "https://api.openai.com/v1/completions",
+      "https://api.openai.com/v1/chat/completions",
       {
         model: "gpt-3.5-turbo",
-        prompt: userInput,
-        max_tokens:3,
+        messages: [{ role: "user", content: userInput }],
+        max_tokens: 50, // Reduce the number of tokens to lower the cost
       },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer sk-proj-3q3CisgsV15D6zgv8gjkT3BlbkFJat8VXkts4n1rI1iqO8MJ`,
+          Authorization: `Bearer ${apiKey}`,
         },
       }
     );
-    return response.data.choices[0].text.trim();
+    console.log("Full API Response:", response.data); // Log the full response for debugging
+
+    if (response.data && response.data.choices && response.data.choices[0] && response.data.choices[0].message && response.data.choices[0].message.content) {
+      return response.data.choices[0].message.content.trim();
+    } else {
+      console.error("Unexpected API response format:", response.data);
+      throw new Error("Invalid response format");
+    }
   } catch (error) {
     console.error("Error getting AI response:", error.response ? error.response.data : error.message);
     return "Sorry, I couldn't understand that.";

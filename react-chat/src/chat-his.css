@@ -1,20 +1,44 @@
 .chat-history {
   width: 20%;
   border-right: 1px solid #ccc;
-  padding: 10px;
+  padding: 1rem;
   overflow-y: scroll;
   height: 100vh;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chat-history h3 {
   margin-top: 0;
+  color: #333;
+  font-size: 1.5em;
 }
 
 .history-message {
-  padding: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .history-message:hover {
-  background-color: #f0f0f0;
+  background-color: #e0f7fa;
+}
+
+.history-message:active {
+  background-color: #b2ebf2;
+}
+
+.history-message:last-child {
+  margin-bottom: 0;
+}
+
+.history-message span.sender {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #00796b;
 }

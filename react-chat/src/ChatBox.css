@@ -9,6 +9,7 @@
   flex: 1;
   background-color: #fff;
   border-left: 1px solid #ccc;
+  /* background-color: purple; */
 }
 
 .messages {
@@ -23,7 +24,7 @@
   border-radius: 1rem;
   margin-bottom: 1rem;
   width: fit-content;
-  max-width: 70%;
+  max-width: 100%;
 }
 
 .user-message {
@@ -35,6 +36,7 @@
   background-color: #f1f1f1;
   align-self: flex-start;
 }
+
 
 .input-container {
   display: flex;

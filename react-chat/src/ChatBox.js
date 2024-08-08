@@ -125,6 +125,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ChatHistory from "./chat-his";
 import "./ChatBox.css";
+import getTTS from './ttsService'
 import OpenAI from "openai";
 
 // const ChatBox = () => {
@@ -214,6 +215,7 @@ const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [history, setHistory] = useState([]);
   const [input, setInput] = useState("");
+  const [audioUrl, setAudioUrl] = useState('');
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -225,7 +227,7 @@ const ChatBox = () => {
         setHistory(allMessages);
         setMessages([]); // Start with an empty chat window
       } catch (error) {
-        console.error("Error fetching messages:", error);
+       console.error("Error fetching messages:", error);
       }
     };
 
@@ -256,6 +258,10 @@ const ChatBox = () => {
       setInput("");
       await axios.post("http://localhost:5001/messages", userMessage);
       // await axios.post("http://localhost:5001/messages", aiMessage);
+      // Generate TTS for AI response
+      const ttsUrl = await getTTS(aiResponse);
+      setAudioUrl(ttsUrl);
+      
     } catch (error) {
       console.error("Error saving message:", error);
     }

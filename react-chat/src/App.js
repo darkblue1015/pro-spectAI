@@ -8,7 +8,7 @@ import {
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import ChatBox from "./ChatBox";
-import TaskPanel from "./TaskPanel";
+// import TaskPanel from "./TaskPanel";
 import SaveExitPage from "./SaveExitPage";
 import NewPage from "./NewPage";
 import "./App.css";
@@ -26,10 +26,7 @@ const MainContent = () => {
       <div className="content">
         <Sidebar />
         <div className="main-content">
-          <div className="content">
-            <TaskPanel />
-            <ChatBox />
-          </div>
+          <ChatBox />
         </div>
       </div>
       <footer className="footer">

@@ -415,52 +415,29 @@ const ChatBox = () => {
   // Add more questions as needed
 ];
 
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:5001/messages");
-  //       const existingMessages = response.data;
-
-  //       if (existingMessages.length === 0) {
-  //         // Send the first question if no messages are present
-  //         const firstQuestion = { sender: "ai", text: defaultQuestions[0] };
-  //         setMessages([firstQuestion]);
-  //         setNextPromptIndex(1); // Set the next prompt index to the second question
-  //       } else {
-  //         setMessages(existingMessages); // Set existing messages if there are any
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching messages:", error);
-  //     }
-  //   };
-
-  //   fetchMessages();
-  // }, []); // Ensure this runs only once when the component mounts
-    useEffect(() => {
-      const fetchMessages = async () => {
-          try {
-              const response = await axios.get("http://localhost:5001/messages");
-              if (response.data.length === 0) {
-                  askNextQuestion();
-              } else {
-                  setMessages(response.data);
-                  setNextPromptIndex(response.data.length);
-              }
-          } catch (error) {
-              console.error("Error fetching messages:", error);
-          }
-      };
-      fetchMessages();
-    }, []);
-
-    const askNextQuestion = () => {
-        if (nextPromptIndex < defaultQuestions.length) {
-            const nextQuestion = { sender: "ai", text: defaultQuestions[nextPromptIndex] };
-            setMessages(prev => [...prev, nextQuestion]);
-            setNextPromptIndex(prevIndex => prevIndex + 1);
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/messages");
+        const existingMessages = response.data;
+        console.log(existingMessages.length)
+        if (existingMessages.length === 0) {
+          // Send the first question if no messages are present
+          const firstQuestion = { sender: "ai", text: defaultQuestions[0] };
+          setNextPromptIndex(1); // Set the next prompt index to the second question
+          setMessages([firstQuestion]);
+          // await axios.post("http://localhost:5001/messages", firstQuestion); // Ensure this is awaited
+          console.log(nextPromptIndex)
+        } else {
+          setMessages(existingMessages); // Set existing messages if there are any
         }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
     };
 
+    fetchMessages();
+  }, []); 
 
   
   const handleSend = async () => {
@@ -469,21 +446,19 @@ const ChatBox = () => {
     const userMessage = { sender: "user", text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
+    setNextPromptIndex(1)
+    console.log(nextPromptIndex)
 
     try {
-      // const aiResponse = await getAIResponse(input);
-      // const aiMessage = { sender: "ai", text: aiResponse };
-
-      // const finalMessages = [...updatedMessages, aiMessage];
-      // setMessages(finalMessages);
-      // setInput("");
       const aiResponse = await getAIResponse(input);
       const aiMessage = { sender: "ai", text: aiResponse };
-      setMessages(prev => [...prev, aiMessage]);
+
+      const finalMessages = [...updatedMessages, aiMessage];
+      setMessages(finalMessages);
       setInput("");
-      askNextQuestion();
 
       await axios.post("http://localhost:5001/messages", userMessage);
+      await axios.post("http://localhost:5001/messages", aiMessage);
       // Check if there are more questions to ask
       if (nextPromptIndex < defaultQuestions.length) {
         const nextQuestion = { sender: "ai", text: defaultQuestions[nextPromptIndex] };
@@ -511,22 +486,22 @@ const ChatBox = () => {
 
       // const conversationHistory = previousMessages.map(msg => `${msg.sender === 'user' ? 'Candidate' : 'CEO'}: ${msg.text}`).join('\n');
 
-      const prompt = `
-      Role: You are the CEO of PRO-spect AI.
-      Situation: You are engaging with a Product Management Candidate who is interested in joining the company in the future.
-      Engagement Style: Visionary, candid, straightforward.
-      Task: Respond to the candidate's messages, provide information about the company, answer their questions, and guide the conversation towards assessing their fit for the company.
+      // const prompts = `
+      // Role: You are the CEO of PRO-spect AI.
+      // Situation: You are engaging with a Product Management Candidate who is interested in joining the company in the future.
+      // Engagement Style: Visionary, candid, straightforward.
+      // Task: Respond to the candidate's messages, provide information about the company, answer their questions, and guide the conversation towards assessing their fit for the company.
 
 
-      Candidate: ${userInput}
+      // Candidate: ${userInput}
 
-      CEO Response:
-      `;
-
+      // CEO Response:
+      // `;
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
         {
           model: "gpt-3.5-turbo",
+          // prompt: prompts,
           
           messages: [
             {
@@ -584,6 +559,15 @@ const ChatBox = () => {
       return "Sorry, I couldn't understand that.";
     }
   };
+  
+  const handleDeleteOldHistory = async() => {
+    try{
+      await axios.post("http://localhost:5001/deleteOldMessages",{limit:1});
+      const resposes = await axios.get("http://localhost:5001/messages");
+    }catch(error){
+      console.log("Error: ", error);
+    }
+  };
 
   return (
     <div className="chatbox">
@@ -607,6 +591,9 @@ const ChatBox = () => {
         />
         <button onClick={handleSend} className="send-button">
           Send
+        </button>
+        <button onClick={handleDeleteOldHistory}>
+          Delete
         </button>
       </div>
     </div>

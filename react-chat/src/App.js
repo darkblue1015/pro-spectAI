@@ -11,6 +11,7 @@ import ChatBox from "./ChatBox";
 import TaskPanel from "./TaskPanel";
 import SaveExitPage from "./SaveExitPage";
 import NewPage from "./NewPage";
+import AnalysisChart from "./chart";
 import "./App.css";
 
 const MainContent = () => {
@@ -19,6 +20,10 @@ const MainContent = () => {
   const handleSaveExit = () => {
     navigate("/save-exit");
   };
+
+  const handleAnalysis = () =>{
+    navigate("/chart");
+  }
 
   return (
     <div className="app">
@@ -36,6 +41,9 @@ const MainContent = () => {
         <button className="footer-button" onClick={handleSaveExit}>
           Save & Exit
         </button>
+        <button className="footer-button" onClick={handleAnalysis}>
+          analysis
+        </button>
       </footer>
     </div>
   );
@@ -47,6 +55,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<NewPage />} />
         <Route path="/main" element={<MainContent />} />
+        <Route path="/chart" element={<AnalysisChart/>} />
         <Route path="/save-exit" element={<SaveExitPage />} />
       </Routes>
     </Router>

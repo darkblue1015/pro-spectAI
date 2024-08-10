@@ -1,5 +1,10 @@
 import React from "react";
 import Navbar from "./Navbar";
+// import AnalysisChart from "./chart";
+
+  // const handleAnalysis = () =>{
+  //   navigate("/chart");
+  // }
 
 const SaveExitPage = () => {
   return (

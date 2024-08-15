@@ -560,15 +560,19 @@ const ChatBox = () => {
     }
   };
   
-  const handleDeleteOldHistory = async() => {
-    try{
-      await axios.post("http://localhost:5001/deleteOldMessages",{limit:1});
-      const resposes = await axios.get("http://localhost:5001/messages");
-    }catch(error){
-      console.log("Error: ", error);
-    }
-  };
-
+  const handleDeleteOldHistory = async () => {
+  try {
+    // Call the deleteOldMessages API
+    await axios.post("http://localhost:5001/deleteAllMessages", { limit: 1 }); 
+    // Fetch the updated messages list after deletion
+    const response = await axios.get("http://localhost:5001/messages");
+    
+    // Update the state with the new messages list
+    setMessages(response.data);
+  } catch (error) {
+    console.error("Error deleting old messages:", error);
+  }
+};
   return (
     <div className="chatbox">
       <div className="messages">

@@ -92,20 +92,20 @@ app.post("/messages", async (req, res) => {
 });
 
 // // Route to delete old messages
-// app.post("/deleteOldMessages", async (req, res) => {
-//   const limit = req.body.limit || 50;
-//   try {
-//     const allMessages = await Message.find().sort({ timestamp: 3 }); // Sort by oldest first
-//     if (allMessages.length > limit) {
-//       const messagesToDelete = allMessages.slice(0, allMessages.length - limit);
-//       const deletePromises = messagesToDelete.map(msg => Message.findByIdAndDelete(msg._id));
-//       await Promise.all(deletePromises);
-//     }
-//     res.status(200).send({ message: "Old messages deleted" });
-//   } catch (error) {
-//     res.status(500).send({ error: "Error deleting old messages" });
-//   }
-// });
+app.post("/deleteOldMessages", async (req, res) => {
+  const limit = req.body.limit || 3;
+  try {
+    const allMessages = await Message.find().sort({ timestamp: 3 }); // Sort by oldest first
+    if (allMessages.length > limit) {
+      const messagesToDelete = allMessages.slice(0, allMessages.length - limit);
+      const deletePromises = messagesToDelete.map(msg => Message.findByIdAndDelete(msg._id));
+      await Promise.all(deletePromises);
+    }
+    res.status(200).send({ message: "Old messages deleted" });
+  } catch (error) {
+    res.status(500).send({ error: "Error deleting old messages" });
+  }
+});
 // Route to delete all messages
 app.delete("/deleteAllMessages", async (req, res) => {
   try {

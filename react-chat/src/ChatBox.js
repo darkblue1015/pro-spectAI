@@ -563,7 +563,7 @@ const ChatBox = () => {
   const handleDeleteOldHistory = async () => {
   try {
     // Call the deleteOldMessages API
-    await axios.post("http://localhost:5001/deleteAllMessages", { limit: 1 }); 
+    await axios.post("http://localhost:5001/deleteOldMessages", { limit: 1 }); 
     // Fetch the updated messages list after deletion
     const response = await axios.get("http://localhost:5001/messages");
     

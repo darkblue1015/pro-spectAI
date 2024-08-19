@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import OpenAI from 'openai';
 
 const AnalysisComponent = () => {
     const [analysisResult, setAnalysisResult] = useState('');
@@ -7,8 +8,6 @@ const AnalysisComponent = () => {
     useEffect(() => {
         fetchAndAnalyzeData();
     }, []);
-
-    
 
     const fetchAndAnalyzeData = async () => {
         const formattedMessages = await fetchAndFormatData();
@@ -20,7 +19,6 @@ const AnalysisComponent = () => {
         try {
             const response = await axios.get('http://localhost:5001/messages');
             const messages = response.data;
-            // Assume each batch can have a maximum of 10 messages for simplicity
             return formatMessagesForGPTBatch(messages, 10);
         } catch (error) {
             console.error('Failed to fetch messages:', error);
@@ -34,35 +32,45 @@ const AnalysisComponent = () => {
             const batch = messages.slice(i, i + batchSize);
             batchedMessages.push(batch.map(msg => `${msg.sender} says: "${msg.text}"`).join('\n'));
         }
-        console.log(batchedMessages)
         return batchedMessages;
     };
 
     const getAnalysisFromGPT = async (formattedMessages) => {
-    const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-    };
+        const openai = new OpenAI({
+            apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+            dangerouslyAllowBrowser: true,
+        });
 
-    const results = [];
-    for (const batch of formattedMessages) {
-        const body = {
-            model: "text-davinci-003",
-            prompt: `Analyze the following conversation and provide a detailed report:\n${batch}`,
-            max_tokens: 1024
-        };
-
-        try {
-            const response = await axios.post('https://api.openai.com/v1/chat/completions', body, { headers });
-            results.push(response.data.choices[0].text);
-        } catch (error) {
-            console.error('Error generating report from chat history:', error);
-            results.push('Error generating analysis for one of the batches.');
+        const results = [];
+        for (const batch of formattedMessages) {
+            try {
+                const completion = await openai.chat.completions.create({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: "Analyze the following conversation and provide a detailed report:" },
+                        { role: "user", content: batch }
+                    ],
+                    max_tokens: 100
+                });
+                results.push(completion.choices[0].message.content);
+            } catch (error) {
+                console.error('Error generating report from chat history:', error);
+                results.push('Error generating analysis for one of the batches.', error);
+            }
         }
-        }
-        return results.join('\n\n'); // Join all results with a separator
+        return results.join('\n\n');
     };
+//     const getAnalysisFromGPT = async (formattedMessages) => {
+//     try {
+//         const response = await axios.post('http://localhost:5002/api/analyze', {
+//             messages: formattedMessages.join('\n\n')
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error('Error generating report from chat history:', error);
+//         return 'Error generating analysis.';
+//     }
+// };
 
     return (
         <div>

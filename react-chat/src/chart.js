@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from "./Navbar";
 import axios from 'axios';
 import OpenAI from 'openai';
+import Engagement_image from "./funnel.png";
+import head_shot from "./Headshot.png";
+import "./chart.css";
 
 const AnalysisComponent = () => {
     const [analysisResult, setAnalysisResult] = useState('');
+    const [showDetails, setShowDetails] = useState(false);  
 
     useEffect(() => {
         fetchAndAnalyzeData();
@@ -47,10 +52,12 @@ const AnalysisComponent = () => {
                 const completion = await openai.chat.completions.create({
                     model: "gpt-3.5-turbo",
                     messages: [
-                        { role: "system", content: "Analyze the following conversation and provide a detailed report:" },
-                        { role: "user", content: batch }
+                        { role: "user", content: batch },
+                        { role: "system", content: "Analyze the following conversation and provide a detailed report about the skill set of the candidate being a product manager for the canpany as a professional. The report should be in the following format:" },
+                        { role: "system", content: "Give me the score of each skills the candidate have as a product manager for the canpany, rate 1-10" },
+                        { role: "system", content: "Please provide the analysis in the following organized format: short_bio:, skills: \"technical_skills, soft_skills, soft_communication\": \"\", \"educational_background,industry_knowledge,career_aspiration, overall_evaluation " },
                     ],
-                    max_tokens: 100
+                    max_tokens: 1500
                 });
                 results.push(completion.choices[0].message.content);
             } catch (error) {
@@ -60,23 +67,46 @@ const AnalysisComponent = () => {
         }
         return results.join('\n\n');
     };
-//     const getAnalysisFromGPT = async (formattedMessages) => {
-//     try {
-//         const response = await axios.post('http://localhost:5002/api/analyze', {
-//             messages: formattedMessages.join('\n\n')
-//         });
-//         return response.data;
-//     } catch (error) {
-//         console.error('Error generating report from chat history:', error);
-//         return 'Error generating analysis.';
-//     }
-// };
 
     return (
         <div>
-            <h1>Chat Analysis Results</h1>
-            <div style={{ whiteSpace: 'pre-wrap' }}>{analysisResult || 'Loading analysis...'}</div>
+            <Navbar />
+            <div className='container'>
+                <h1>Engagement Stage</h1>
+                <img src={Engagement_image} alt="placeholder_for_engagement_image" className="engagement-image" />
+                <h1>Talent Poll</h1>
+                <div className="analysis-container">
+                    <div className="header-left">
+                    <img src={head_shot} alt="Candidate Headshot" className="headshot-image" />
+                    <div className="candidate-details">
+                        <span className="candidate-name">Gretchen Bator</span>
+                        <span className="candidate-role">Product Manager</span>
+                        <div className="candidate-info">
+                            <span className="candidate-info-item">📍 San Diego</span>
+                            <span className="candidate-info-item">1 YoE</span>
+                            <span className="candidate-info-item">$70k-$100k</span>
+                        </div>
+                        <button className="more-details-button" onClick={() => setShowDetails(!showDetails)}>
+                            {showDetails ? 'Less Details' : 'More Details'}
+                        </button>
+                    </div>
+                    
+                </div>
+                    
+                    {showDetails && (
+                        <div className="more-details-section">
+                            <h3>AI-Generated Analysis</h3>
+                            <div>
+                                {analysisResult || 'Loading analysis...'}
+                            </div>
+                        </div>
+                    )}
+                   
+                </div>
+            </div>
         </div>
+        
+            
     );
 };
 

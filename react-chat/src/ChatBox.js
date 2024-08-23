@@ -4,6 +4,7 @@ import "./ChatBox.css";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import FormatSizeSharpIcon from "@mui/icons-material/FormatSizeSharp";
+import CropFreeIcon from '@mui/icons-material/CropFree';
 import CandidateImage from "./Candidate.png";
 import CEOImage from "./Zack.png";
 

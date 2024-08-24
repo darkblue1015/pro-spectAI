@@ -11,12 +11,33 @@ import CEOImage from "./Zack.png";
 const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [nextPromptIndex, setNextPromptIndex] = useState(0);
+
+  const defaultQuestions = [
+    "Please give a short bio about yourself - 1 short paragraph",
+    "Where are you right now? - 1 word",
+    "When did you graduate from college? - 1 number",
+    "Why do you interested in this position? - 1 short paragraph ",
+    "Please give a short paragraph about your previous experience that align with this position",
+    // Add more questions as needed
+  ];
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get("http://localhost:5001/messages");
-        setMessages(response.data);
+        const existingMessages = response.data;
+        console.log(existingMessages.length);
+        if (existingMessages.length === 0) {
+          // Send the first question if no messages are present
+          const firstQuestion = { sender: "ai", text: defaultQuestions[0] };
+          setNextPromptIndex(1); // Set the next prompt index to the second question
+          setMessages([firstQuestion]);
+          // await axios.post("http://localhost:5001/messages", firstQuestion); // Ensure this is awaited
+          console.log(nextPromptIndex);
+        } else {
+          setMessages(existingMessages); // Set existing messages if there are any
+        }
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
@@ -35,6 +56,8 @@ const ChatBox = () => {
     };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
+    setNextPromptIndex(1);
+    console.log(nextPromptIndex);
 
     try {
       const aiResponse = await getAIResponse(input);
@@ -50,12 +73,24 @@ const ChatBox = () => {
 
       await axios.post("http://localhost:5001/messages", userMessage);
       await axios.post("http://localhost:5001/messages", aiMessage);
+      // Check if there are more questions to ask
+      if (nextPromptIndex < defaultQuestions.length) {
+        const nextQuestion = {
+          sender: "ai",
+          text: defaultQuestions[nextPromptIndex],
+        };
+        updatedMessages.push(nextQuestion); // Add next question to message list
+        setMessages(updatedMessages);
+        setNextPromptIndex(nextPromptIndex + 1); // Increment to the next question index
+
+        await axios.post("http://localhost:5001/messages", nextQuestion); // Store AI question
+      }
     } catch (error) {
       console.error("Error saving message:", error);
     }
   };
 
-  const getAIResponse = async (userInput) => {
+  const getAIResponse = async (userInput, previousMessages) => {
     try {
       const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
       console.log("OpenAI API Key:", apiKey);
@@ -66,10 +101,24 @@ const ChatBox = () => {
         );
       }
 
+      // const conversationHistory = previousMessages.map(msg => `${msg.sender === 'user' ? 'Candidate' : 'CEO'}: ${msg.text}`).join('\n');
+
+      // const prompts = `
+      // Role: You are the CEO of PRO-spect AI.
+      // Situation: You are engaging with a Product Management Candidate who is interested in joining the company in the future.
+      // Engagement Style: Visionary, candid, straightforward.
+      // Task: Respond to the candidate's messages, provide information about the company, answer their questions, and guide the conversation towards assessing their fit for the company.
+
+      // Candidate: ${userInput}
+
+      // CEO Response:
+      // `;
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
         {
           model: "gpt-3.5-turbo",
+          // prompt: prompts,
+
           messages: [
             {
               role: "system",
@@ -93,7 +142,8 @@ const ChatBox = () => {
 
             { role: "user", content: userInput },
           ],
-          max_tokens: 50,
+          max_tokens: 150,
+          temperature: 0.5,
         },
         {
           headers: {
@@ -126,6 +176,19 @@ const ChatBox = () => {
     }
   };
 
+  const handleDeleteOldHistory = async () => {
+    try {
+      // Call the deleteOldMessages API
+      await axios.post("http://localhost:5001/deleteOldMessages", { limit: 1 });
+      // Fetch the updated messages list after deletion
+      const response = await axios.get("http://localhost:5001/messages");
+
+      // Update the state with the new messages list
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Error deleting old messages:", error);
+    }
+  };
   return (
     <div className="chatbox">
       {/* <div className="messages">
@@ -192,6 +255,9 @@ const ChatBox = () => {
         />
         <button onClick={handleSend} className="send-button">
           Send
+        </button>
+        <button onClick={handleDeleteOldHistory} className="delete-button">
+          Delete
         </button>
       </div>
     </div>

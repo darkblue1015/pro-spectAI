@@ -12,17 +12,17 @@ const Navbar = () => {
       <div className="navbar-items">
         <div className="navbar-item">
           {" "}
-          {/* <CropFreeIcon /> */}
+          <CropFreeIcon />
           Challenge Overview
         </div>
         <div className="navbar-item">
           {" "}
-          {/* <CropFreeIcon /> */}
+          <CropFreeIcon />
           Validation Challenge
         </div>
         <div className="navbar-item">
           {" "}
-          {/* <CropFreeIcon /> */}
+          <CropFreeIcon />
           Apply&Engage
         </div>
       </div>

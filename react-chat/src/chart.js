@@ -145,13 +145,13 @@ const AnalysisComponent = () => {
               <div className="details-section">
                 <div className="short-bio-section">
                   <h4>Short Bio</h4>
-                  {/* <p>Hi, I’m Gretchen, a Product Manager with 1 years of experience. I specialize in user-centered design, agile methodologies, and data-driven decision-making.</p> */}
+                  {/* <p>Hi, I’m Gretchen, a Product Manager with 1 years of experience. I specialize in user-centered design, agile methodologies, and data-driven decision-making.</p > */}
                   <p>{analysisResult.short_bio || "Loading short bio..."}</p>
                 </div>
 
                 <div className="elevator-pitch-section">
                   <h4>Elevator Pitch</h4>
-                  {/* <p>Hi, I’m Esther, a Product Manager with 2 years of experience. I specialize in user-centered design, agile methodologies, and data-driven decision-making. My track record includes delivering innovative AI solutions that streamline HR processes and enhance decision-making. I’m passionate about solving complex problems and creating exceptional user experiences. I’m excited about opportunities to bring cutting-edge products to life and achieve sustained success.</p> */}
+                  {/* <p>Hi, I’m Esther, a Product Manager with 2 years of experience. I specialize in user-centered design, agile methodologies, and data-driven decision-making. My track record includes delivering innovative AI solutions that streamline HR processes and enhance decision-making. I’m passionate about solving complex problems and creating exceptional user experiences. I’m excited about opportunities to bring cutting-edge products to life and achieve sustained success.</p > */}
                   <p>
                     {analysisResult.elevator_pitch ||
                       "Loading elevator pitch..."}

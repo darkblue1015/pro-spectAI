@@ -1,67 +1,73 @@
-/* 样式表文件：Navbar.css */
-
-/* 清除默认样式 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* 设置HTML和Body的高度为100% */
 html, body {
   height: 100%;
   font-family: Arial, sans-serif;
+  /* font-family: 'Times New Roman', Times, serif; */
 }
 
-/* 设置Navbar样式 */
 .navbar {
   display: flex;
   align-items: center;
-  background-color: #1a1a1a; /* 调整背景颜色 */
-  padding: 0 20px;
+  justify-content: space-between; 
+  background-color: #2f2f2f;
+  padding: 0 1rem;
   height: 60px;
   width: 100%;
   color: #ffffff;
   font-size: 14px;
 }
 
-/* 设置Logo样式 */
 .navbar-logo-left img {
-  height: 40px;
-  margin-right: 20px;
+  height: 3rem;
+  margin-right: 1rem;
 }
 
-/* 设置Navbar项样式 */
+.navbar-items {
+  display: flex;
+  flex-grow: 1; 
+  justify-content: center;
+}
+
 .navbar-item {
-  margin-right: 20px;
+  margin-right: 1.5rem;
   cursor: pointer;
-  padding: 10px;
-  color: #b0b0b0; /* 调整字体颜色 */
+  padding: 2rem;
+  color: #cccccc; 
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-item:last-child {
+  margin-right: 0; 
 }
 
 .navbar-item.active::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -10px;
+  bottom: -1rem;
   width: 100%;
   height: 2px;
-  background-color: orange;
+  background-color: #f57c00; 
 }
 
 .navbar-item:hover {
-  background-color: #333333;
+  background-color: #444444;
   border-radius: 4px;
 }
 
 .navbar-assistance {
-  margin-left: auto;
   margin-right: 20px;
   padding: 10px 15px;
-  border: 1px solid #555555;
+  border: 1px solid #777777; 
   border-radius: 4px;
-  background-color: #333333;
+  background-color: #2f2f2f;
   cursor: pointer;
   color: #b0b0b0;
   display: flex;
@@ -69,19 +75,15 @@ html, body {
 }
 
 .navbar-assistance:hover {
-  background-color: #444444;
+  background-color: #555555; 
 }
 
 .navbar-profile {
   padding: 10px 15px;
   cursor: pointer;
-  background-color: #4d4d4d;
+  background-color: #6f5ae3; 
   border-radius: 4px;
   color: #ffffff;
   display: flex;
   align-items: center;
-}
-
-.navbar-profile:hover {
-  background-color: #5d5d5d;
 }

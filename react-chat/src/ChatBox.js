@@ -407,27 +407,27 @@ const ChatBox = () => {
   const [nextPromptIndex, setNextPromptIndex] = useState(0);
 
   const defaultQuestions = [
-  "Please give a short bio about yourself - 1 short paragraph",
-  "Where are you right now? - 1 word",
-  "When did you graduate from college? - 1 number",
-  "Why do you interested in this position? - 1 short paragraph ",
-  "Please give a short paragraph about your previous experience that align with this position",
-  // Add more questions as needed
-];
+    "Please give a short bio about yourself - 1 short paragraph",
+    "Where are you right now? - 1 word",
+    "When did you graduate from college? - 1 number",
+    "Why do you interested in this position? - 1 short paragraph ",
+    "Please give a short paragraph about your previous experience that align with this position",
+    // Add more questions as needed
+  ];
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get("http://localhost:5001/messages");
         const existingMessages = response.data;
-        console.log(existingMessages.length)
+        console.log(existingMessages.length);
         if (existingMessages.length === 0) {
           // Send the first question if no messages are present
           const firstQuestion = { sender: "ai", text: defaultQuestions[0] };
           setNextPromptIndex(1); // Set the next prompt index to the second question
           setMessages([firstQuestion]);
           // await axios.post("http://localhost:5001/messages", firstQuestion); // Ensure this is awaited
-          console.log(nextPromptIndex)
+          console.log(nextPromptIndex);
         } else {
           setMessages(existingMessages); // Set existing messages if there are any
         }
@@ -437,17 +437,16 @@ const ChatBox = () => {
     };
 
     fetchMessages();
-  }, []); 
+  }, []);
 
-  
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
-    setNextPromptIndex(1)
-    console.log(nextPromptIndex)
+    setNextPromptIndex(1);
+    console.log(nextPromptIndex);
 
     try {
       const aiResponse = await getAIResponse(input);
@@ -461,7 +460,10 @@ const ChatBox = () => {
       await axios.post("http://localhost:5001/messages", aiMessage);
       // Check if there are more questions to ask
       if (nextPromptIndex < defaultQuestions.length) {
-        const nextQuestion = { sender: "ai", text: defaultQuestions[nextPromptIndex] };
+        const nextQuestion = {
+          sender: "ai",
+          text: defaultQuestions[nextPromptIndex],
+        };
         updatedMessages.push(nextQuestion); // Add next question to message list
         setMessages(updatedMessages);
         setNextPromptIndex(nextPromptIndex + 1); // Increment to the next question index
@@ -492,7 +494,6 @@ const ChatBox = () => {
       // Engagement Style: Visionary, candid, straightforward.
       // Task: Respond to the candidate's messages, provide information about the company, answer their questions, and guide the conversation towards assessing their fit for the company.
 
-
       // Candidate: ${userInput}
 
       // CEO Response:
@@ -502,7 +503,7 @@ const ChatBox = () => {
         {
           model: "gpt-3.5-turbo",
           // prompt: prompts,
-          
+
           messages: [
             {
               role: "system",
@@ -559,20 +560,20 @@ const ChatBox = () => {
       return "Sorry, I couldn't understand that.";
     }
   };
-  
+
   const handleDeleteOldHistory = async () => {
-  try {
-    // Call the deleteOldMessages API
-    await axios.post("http://localhost:5001/deleteOldMessages", { limit: 1 }); 
-    // Fetch the updated messages list after deletion
-    const response = await axios.get("http://localhost:5001/messages");
-    
-    // Update the state with the new messages list
-    setMessages(response.data);
-  } catch (error) {
-    console.error("Error deleting old messages:", error);
-  }
-};
+    try {
+      // Call the deleteOldMessages API
+      await axios.post("http://localhost:5001/deleteOldMessages", { limit: 1 });
+      // Fetch the updated messages list after deletion
+      const response = await axios.get("http://localhost:5001/messages");
+
+      // Update the state with the new messages list
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Error deleting old messages:", error);
+    }
+  };
   return (
     <div className="chatbox">
       <div className="messages">
@@ -596,7 +597,7 @@ const ChatBox = () => {
         <button onClick={handleSend} className="send-button">
           Send
         </button>
-        <button onClick={handleDeleteOldHistory}>
+        <button onClick={handleDeleteOldHistory} className="delete-button">
           Delete
         </button>
       </div>

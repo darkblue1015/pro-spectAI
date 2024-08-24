@@ -8,7 +8,6 @@ import {
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import ChatBox from "./ChatBox";
-import TaskPanel from "./TaskPanel";
 import SaveExitPage from "./SaveExitPage";
 import NewPage from "./NewPage";
 import AnalysisChart from "./chart";
@@ -21,9 +20,9 @@ const MainContent = () => {
     navigate("/save-exit");
   };
 
-  const handleAnalysis = () =>{
+  const handleAnalysis = () => {
     navigate("/chart");
-  }
+  };
 
   return (
     <div className="app">
@@ -32,7 +31,6 @@ const MainContent = () => {
         <Sidebar />
         <div className="main-content">
           <div className="content">
-            <TaskPanel />
             <ChatBox />
           </div>
         </div>
@@ -42,7 +40,7 @@ const MainContent = () => {
           Save & Exit
         </button>
         <button className="footer-button" onClick={handleAnalysis}>
-          analysis
+          Analysis
         </button>
       </footer>
     </div>
@@ -55,7 +53,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<NewPage />} />
         <Route path="/main" element={<MainContent />} />
-        <Route path="/chart" element={<AnalysisChart/>} />
+        <Route path="/chart" element={<AnalysisChart />} />
         <Route path="/save-exit" element={<SaveExitPage />} />
       </Routes>
     </Router>

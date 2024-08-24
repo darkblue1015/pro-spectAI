@@ -60,7 +60,8 @@
   border-color: #007bff;
 }
 
-.send-button {
+.send-button,
+.delete-button {
   padding: 10px 20px;
   border: none;
   border-radius: 20px;
@@ -71,10 +72,21 @@
   transition: background-color 0.3s ease;
 }
 
+.delete-button{
+  background-color: red;
+}
+
 .send-button:hover {
   background-color: #0056b3;
+}
+.delete-button:hover {
+  background-color: red;
 }
 
 .send-button:active {
   background-color: #004494;
+}
+
+.delete-button:active{
+  background-color: red;
 }

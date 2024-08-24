@@ -9,7 +9,7 @@ import radarGraph from "./Frame 427318923.png";
 import "./chart.css";
 
 const AnalysisComponent = () => {
-  const [analysisResult, setAnalysisResult] = useState("");
+  const [analysisResult, setAnalysisResult] = useState({});
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const AnalysisComponent = () => {
     const formattedMessages = await fetchAndFormatData();
     const analysis = await getAnalysisFromGPT(formattedMessages);
     console.log("Analysis result:", analysis);
-    setAnalysisResult(analysis);
+    setAnalysisResult(analysis || {});
   };
 
   const fetchAndFormatData = async () => {
@@ -66,7 +66,7 @@ const AnalysisComponent = () => {
             // { role: "system", content: "Please provide the analysis in the following organized format: short_bio:, skills: \"technical_skills, soft_skills, soft_communication\": \"\", \"educational_background,industry_knowledge,career_aspiration, overall_evaluation " },
             {
               role: "system",
-              content: `Please analyze the following conversation and provide a detailed report in JSON format with the following structure: 
+              content: `Please analyze the following conversation and provide a detailed report in JSON format with the following structure:
                     {
                         "short_bio": "string",
                         "elevator_pitch": "string",
@@ -102,7 +102,6 @@ const AnalysisComponent = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="container">
         <h1>Engagement Stage</h1>
         <img

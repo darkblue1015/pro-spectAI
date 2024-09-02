@@ -3,7 +3,16 @@
   height: 100vh;
 }
 
-/* .messages {
+.chatbox {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+  /* background-color: purple; */
+}
+
+.messages {
   flex: 1;
   padding: 1rem;
   overflow-y: auto;
@@ -26,39 +35,6 @@
 .ai-message {
   background-color: #f1f1f1;
   align-self: flex-start;
-} */
-
-.message-container {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 0.5rem;
-}
-
-.user-message,
-.ai-message {
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 0.5rem 1rem;
-  max-width: 70%;
-  word-wrap: break-word;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 14px; /* 调整字体大小 */
-  line-height: 1.5; /* 调整行高 */
-}
-
-.user-message {
-  background-color: #d1e7dd;
-}
-
-.ai-message {
-  background-color: #ffffff;
 }
 
 
@@ -84,7 +60,8 @@
   border-color: #007bff;
 }
 
-.send-button {
+.send-button,
+.delete-button {
   padding: 10px 20px;
   border: none;
   border-radius: 20px;
@@ -95,24 +72,21 @@
   transition: background-color 0.3s ease;
 }
 
+.delete-button{
+  background-color: red;
+}
+
 .send-button:hover {
   background-color: #0056b3;
+}
+.delete-button:hover {
+  background-color: red;
 }
 
 .send-button:active {
   background-color: #004494;
 }
 
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 0.5rem;
+.delete-button:active{
+  background-color: red;
 }
-
-.message-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
